@@ -24,12 +24,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [EmployeeController::class, 'index'])->name('index');
         Route::get('/create', [EmployeeController::class, 'create'])->name('create');
         Route::post('/', [EmployeeController::class, 'store'])->name('store');
+        Route::get('/data', [EmployeeController::class, 'getData'])->name('data');        
     });
     Route::prefix('tasks')->name('tasks.')->group(function () {
         Route::get('/', [TaskController::class, 'index'])->name('index');
         Route::get('/create', [TaskController::class, 'create'])->name('create');
         Route::post('/', [TaskController::class, 'store'])->name('store');
         Route::post('/{task}/status', [TaskController::class, 'updateStatus'])->name('updateStatus');
+        Route::get('/data', [TaskController::class, 'getData'])->name('data');        
     });
     
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');

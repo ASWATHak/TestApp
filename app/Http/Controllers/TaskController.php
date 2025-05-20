@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class TaskController extends Controller
 {
@@ -13,6 +14,27 @@ class TaskController extends Controller
         $tasks = Task::with('employee.user')->get();
         return view('tasks.index', compact('tasks'));
     }
+    
+public function getData(Request $request)
+{
+    $tasks = Task::select('tasks.*', 'users.name as employee_name')
+        ->join('employees', 'tasks.employee_id', '=', 'employees.id')
+        ->join('users', 'employees.user_id', '=', 'users.id');
+
+    return DataTables::of($tasks)
+        ->addColumn('employee', function ($task) {
+            return $task->employee_name ?? 'N/A';
+        })
+        ->addColumn('status', function ($task) {
+            return view('tasks.partials.status-select', ['task' => $task])->render();
+        })
+        ->orderColumn('employee', 'users.name $1')
+        ->filterColumn('employee', function ($query, $keyword) {
+            $query->where('users.name', 'like', "%{$keyword}%");
+        })
+        ->rawColumns(['status'])
+        ->make(true);
+}
 
     public function create()
     {
