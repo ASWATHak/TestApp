@@ -2,11 +2,17 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-    <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-             Welcome back, {{ auth()->user()->name }}
-        </h1>
-        <p class="text-gray-600 dark:text-gray-300 text-sm">Here’s a summary of your tasks.</p>
+    <div class="mb-6 d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+                Welcome back, {{ auth()->user()->name }}
+            </h1>
+            <p class="text-gray-600 dark:text-gray-300 text-sm">Here’s a summary of your tasks.</p>
+        </div>
+        <form id="logoutForm" action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
     </div>
 
     <div class="d-flex justify-content-end mb-4 gap-2">

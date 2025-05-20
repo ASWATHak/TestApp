@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -41,17 +42,23 @@ class UserController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->route('dashboard');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Login successful.',
+            ]);
         }
 
-        return redirect('/login')->with('error', 'Invalid credentials. Please try again.');
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid credentials. Please try again.',
+        ], 401);
     }
 
     public function logout()
     {
-        Auth::logout();
-        return redirect('/login')->with('success', 'You have been logged out.');
+
+        Auth::logout();    
+        return redirect()->route('login')->with('success', 'You have been logged out successfully.');
     }
 }
-
-
